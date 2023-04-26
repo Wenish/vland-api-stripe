@@ -48,8 +48,8 @@ export class AppController {
         quantity: 1,
         price: price.data[0].id
       }],
-      success_url: `${origin}/success`,
-      cancel_url: `${origin}/store`,
+      success_url: `${origin}/success-payment-strip`,
+      cancel_url: `${origin}/cancel-payment-strip`,
       customer_email: user.email,
       metadata: {
         productId: product.id
