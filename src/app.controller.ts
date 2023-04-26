@@ -48,7 +48,7 @@ export class AppController {
         quantity: 1,
         price: price.data[0].id
       }],
-      success_url: `${origin}/success-payment-strip`,
+      success_url: `${origin}/success-payment-strip?price=${price.data[0].id}`,
       cancel_url: `${origin}/cancel-payment-strip`,
       customer_email: user.email,
       metadata: {
