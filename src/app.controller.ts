@@ -7,6 +7,7 @@ import { CreateCheckoutSessionDto } from './dto/create-checkout-session.dto';
 import { ConfigService } from "@nestjs/config";
 import { Stripe } from 'stripe';
 import * as admin from 'firebase-admin';
+import { Money } from './database/schemas/money.schema';
 
 @Controller()
 export class AppController {
@@ -30,7 +31,7 @@ export class AppController {
   @ApiBearerAuth('Bearer Authentication')
   async getUserMoneyByUid(@User() user: FirebaseUser) {
     const money = await this.appService.getMoneyByUid(user.uid)
-    return money;
+    return money as Money;
   }
 
   @Post('/create-checkout-session')
