@@ -39,14 +39,14 @@ export class AppController {
   async createCheckoutSession(@Body() createCheckoutSessionDto: CreateCheckoutSessionDto, @User() user: FirebaseUser, @Headers() headers) {
     const origin = headers?.origin
     const product = await this.stripe.products.retrieve(createCheckoutSessionDto.productId, { expand: ['price'] })
-    const price = await this.stripe.prices.list({ product: product.id })
+    const price = await this.stripe.prices.retrieve(product.id)
 
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: [{
         quantity: 1,
-        price: price.data[0].id
+        price: price.id
       }],
       success_url: `${origin}/success-payment-strip?points=${product.metadata.points}&pointsBonus=${product.metadata.pointsBonus}`,
       cancel_url: `${origin}/cancel-payment-strip`,
@@ -89,6 +89,13 @@ export class AppController {
                   const product = await this.stripe.products.retrieve(productId);
                   const pointsToAdd = parseInt(product.metadata.points, 10) + parseInt(product.metadata.pointsBonus, 10)
                   await this.appService.addMoneyByUid(uid, pointsToAdd)
+                  const price = await this.stripe.prices.retrieve(product.id)
+                  await this.appService.createPayment({
+                    uid: uid,
+                    price: price.unit_amount,
+                    currency: price.currency,
+                    method: 'stripe'
+                  })
               }
 
               break;

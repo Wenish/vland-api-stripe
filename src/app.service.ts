@@ -3,12 +3,15 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Money, MoneyDocument } from "./database/schemas/money.schema";
 import { Model } from "mongoose";
 import * as admin from 'firebase-admin';
+import { Payment, PaymentDocument } from "./database/schemas/payment.schema";
 
 Injectable()
 export class AppService {
     constructor(
         @InjectModel(Money.name)
-        private readonly moneyModel: Model<MoneyDocument>
+        private readonly moneyModel: Model<MoneyDocument>,
+        @InjectModel(Payment.name)
+        private readonly paymentModel: Model<PaymentDocument>
     ) {}
 
     async getMoneyByUid(uid: string) {
@@ -39,5 +42,15 @@ export class AppService {
                 new: true
             })
         return newMoney
+    }
+
+    async createPayment(data: {
+        uid: string
+        price: number
+        currency: string
+        method: string
+    }) {
+        const newPayment = new this.paymentModel(data)
+        return await newPayment.save()
     }
 }
