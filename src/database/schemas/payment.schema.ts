@@ -15,16 +15,16 @@ export class Payment {
     createdAt: Date;
     updatedAt: Date;
 
-    @Prop({ unique: true })
+    @Prop({ required: true })
     uid: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     price: number
 
-    @Prop({required: true})
+    @Prop({ required: true })
     currency: string
 
-    @Prop({required: true})
+    @Prop({ required: true })
     method: string
 }
 
