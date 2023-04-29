@@ -15,7 +15,7 @@ export class Payment {
     createdAt: Date;
     updatedAt: Date;
 
-    @Prop({ required: true, unique: true })
+    @Prop({ unique: true })
     uid: string;
 
     @Prop({required: true})
